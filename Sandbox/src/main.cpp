@@ -5,7 +5,7 @@
 #include "ExcalRuntime.h"
 
 int main() {
-    Runtime runtime = Runtime(RuntimeMode::RELEASE);
-    runtime.RunRelease();
+    auto runtime = Runtime(RuntimeMode::DEBUG);
+    runtime.RunStandalone();
     return 0;
 }

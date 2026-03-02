@@ -17,21 +17,21 @@ namespace Debug {
 
     template<typename... Args>
     void LogInfo(std::format_string<Args...> fmt, Args&&... args) {
-        _internal::_log_impl("[INFO]    ", fmt.get(), std::make_format_args(args...));
+        _internal::_log_impl("[INFO]    | ", fmt.get(), std::make_format_args(args...));
     }
 
     template<typename... Args>
     void LogWarning(std::format_string<Args...> fmt, Args&&... args) {
-        _internal::_log_impl("[WARNING] ", fmt.get(), std::make_format_args(args...));
+        _internal::_log_impl("[WARNING] | ", fmt.get(), std::make_format_args(args...));
     }
 
     template<typename... Args>
     void LogError(std::format_string<Args...> fmt, Args&&... args) {
-        _internal::_log_impl("[ERROR]   ", fmt.get(), std::make_format_args(args...));
+        _internal::_log_impl("[ERROR]   | ", fmt.get(), std::make_format_args(args...));
     }
 
     template<typename... Args>
     void LogDebug(std::format_string<Args...> fmt, Args&&... args) {
-        _internal::_log_impl("[DEBUG]   ", fmt.get(), std::make_format_args(args...));
+        _internal::_log_impl("[DEBUG]   | ", fmt.get(), std::make_format_args(args...));
     }
 }

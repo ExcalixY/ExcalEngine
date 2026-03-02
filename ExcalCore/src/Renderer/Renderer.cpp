@@ -7,8 +7,10 @@
 
 #include "ExcalCore/Rendering/Renderer.h"
 
+#include "ExcalCore/Objects/GameObject.h"
+#include "ExcalCore/Objects/Components/MeshRenderer.h"
 #include "ExcalCore/Systems/Debug/Log.h"
-#include "ExcalCore/Systems/Input/Input.h"
+#include "ExcalCore/Systems/Input/InputSystem.h"
 
 Renderer::Renderer() {
     // Initialize GLFW
@@ -48,30 +50,19 @@ Renderer::Renderer() {
         static_cast<Renderer*>(glfwGetWindowUserPointer(window))->OnViewportSizeChange(width, height);
     });
 
+    glEnable(GL_DEPTH_TEST);
+
     _running = true;
 }
 
-void Renderer::Run() {
-    while (_running) {
-        if (glfwWindowShouldClose(_window)) {
-            _running = false;
-        }
+void Renderer::RenderToScreen() const {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        glfwPollEvents();
-        Input::Update(_window);
-
-        if (Input::GetKeyDown(KeyCode::Escape)) {
-            _running = false;
-        }
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-
-        glfwSwapBuffers(_window);
-    }
+    glfwSwapBuffers(_window);
 }
 
-void Renderer::OnViewportSizeChange(int width, int height) {
+void Renderer::OnViewportSizeChange(const int width, const int height) {
     _window_width = width;
     _window_height = height;
     glViewport(0, 0, width, height);
