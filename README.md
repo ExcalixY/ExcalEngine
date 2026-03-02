@@ -53,9 +53,6 @@ cmake --build build
 
 [ ] Simple Editor Applications
 
-## Journal
-For anyone curious, I've also attached my development journal in the `docs/` folder. It contains all the logs, documentation and development ideas that I've come up with.
-
 ## License
 This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
 
