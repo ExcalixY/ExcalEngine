@@ -44,10 +44,13 @@ cmake --build build
  
 ## Roadmap
 [x] Starting a Basic Git project :)
+
 [ ] Basic 3D Rendering
+
 [ ] Materials
+
 [ ] Lighting and Shading
-[ ] 
+
 [ ] Simple Editor Applications
 
 ## Journal
