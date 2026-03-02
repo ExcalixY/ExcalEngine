@@ -14,37 +14,38 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
 option(EXCALENGINE_BUILD_EDITOR "Build Editor" ON)
 
 if(WIN32)
-    message("ExcalEngine Build - Platform: Windows")
-    add_compile_definitions(EXCALENGINE_WINDOWS)
+  message("ExcalEngine Build - Platform: Windows")
+  add_compile_definitions(EXCALENGINE_WINDOWS)
 elseif(UNIX AND NOT APPLE OR LINUX)
-    message("ExcalEngine Build - Platform: Linux")
-    add_compile_definitions(EXCALENGINE_LINUX)
-elseif (UNIX AND APPLE)
-    message("ExcalEngine Build - Platform: MacOS")
-    add_compile_definitions(EXCALENGINE_LINUX)
+  message("ExcalEngine Build - Platform: Linux")
+  add_compile_definitions(EXCALENGINE_LINUX)
+elseif(UNIX AND APPLE)
+  message("ExcalEngine Build - Platform: MacOS")
+  add_compile_definitions(EXCALENGINE_LINUX)
 else()
-    message("ExcalEngine Build - Platform: Unsupported.")
-    message("ExcalEngine Build - Stopping building. Please wait for added support for your specific environment or add a compile flag [WIN32, LINUX, UNIX APPLE]")
-    return(0)
+  message("ExcalEngine Build - Platform: Unsupported.")
+  message("ExcalEngine Build - Stopping building.
+  Please wait for added support for your specific environment
+  or add a compile flag [WIN32, LINUX, UNIX APPLE]")
+  return(0)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions(EXCALENGINE_DEBUG)
-    message("ExcalEngine Build - Build Type: DEBUG")
+  add_compile_definitions(EXCALENGINE_DEBUG)
+  message("ExcalEngine Build - Build Type: DEBUG")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions(EXCALENGINE_RELEASE)
-    message("ExcalEngine Build - Build Type: RELEASE")
+  add_compile_definitions(EXCALENGINE_RELEASE)
+  message("ExcalEngine Build - Build Type: RELEASE")
 endif()
 
 # Libraries
 add_subdirectory(Libs/glfw)
-add_subdirectory(Libs/imgui)
 
 add_library(glad STATIC Libs/glad/src/glad.c)
 target_include_directories(glad PUBLIC Libs/glad/include)
@@ -52,14 +53,30 @@ target_include_directories(glad PUBLIC Libs/glad/include)
 add_library(glm INTERFACE)
 target_include_directories(glm INTERFACE Libs/glm)
 
+set(IMGUI_DIR Libs/imgui)
+
+# Compile ImGUI
+set(IMGUI_SRC
+  ${IMGUI_DIR}/imgui.cpp
+  ${IMGUI_DIR}/imgui_draw.cpp
+  ${IMGUI_DIR}/imgui_tables.cpp
+  ${IMGUI_DIR}/imgui_widgets.cpp
+  ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+  ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+  # ${CMAKE_BINARY_DIR}/Libs/imgui/imgui_demo.cpp
+)
+
+add_library(imgui INTERFACE ${IMGUI_SRC})
+target_include_directories(imgui INTERFACE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
 # Engine
 add_subdirectory(ExcalCore)
 # add_subdirectory(ExcalBindings)
 # add_subdirectory(ExcalCSharp)
 add_subdirectory(ExcalRuntime)
-if (EXCALENGINE_BUILD_EDITOR)
-    add_compile_definitions(EXCALENGINE_EDITOR)
-    add_subdirectory(ExcalEditor)
+if(EXCALENGINE_BUILD_EDITOR)
+  add_compile_definitions(EXCALENGINE_EDITOR)
+  add_subdirectory(ExcalEditor)
 endif()
 
 # Test Game
