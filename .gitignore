@@ -1,4 +1,5 @@
 bin/
 cmake-build-debug/
+Libs/
 .idea/
 .git/
