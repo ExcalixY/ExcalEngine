@@ -1,3 +1,7 @@
+//
+// Created by arch-excalixy on 3/1/26.
+//
+
 #include "ExcalRuntime/Runtime.h"
 
 Runtime::Runtime(const RuntimeMode mode) : _mode(mode), _renderer() {

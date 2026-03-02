@@ -1,17 +1,19 @@
+//
+// Created by arch-excalixy on 3/1/26.
+//
+
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
-#include <iostream>
 
 #include "ExcalCore/Rendering/Renderer.h"
 
-Renderer* Renderer::_instance = nullptr;
+#include "ExcalCore/Systems/Debug/Log.h"
+#include "ExcalCore/Systems/Input/Input.h"
 
 Renderer::Renderer() {
-    _instance = this;
-
     // Initialize GLFW
     if (!glfwInit()) {
-        std::cerr << "ExcalEngine [ERROR]: Failed to initialize GLFW." << std::endl;
+        Debug::LogError("Failed to initialize GLFW.");
         return;
     }
 
@@ -22,8 +24,9 @@ Renderer::Renderer() {
     // Create window
     _window = glfwCreateWindow(_window_width, _window_height, "ExcalEngine", nullptr, nullptr);
     if (!_window) {
-        std::cerr << "ExcalEngine [ERROR]: Failed to create GLFW window." << std::endl;
+        Debug::LogError("Failed to create GLFW window.");
         glfwTerminate();
+        _running = false;
         return;
     }
 
@@ -31,7 +34,8 @@ Renderer::Renderer() {
 
     // Initialize GLAD - must be after MakeContextCurrent
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "ExcalEngine [ERROR]: Failed to initialize GLAD." << std::endl;
+        Debug::LogError("Failed to initialize GLAD.");
+        _running = false;
         return;
     }
 
@@ -43,11 +47,22 @@ Renderer::Renderer() {
     glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
         static_cast<Renderer*>(glfwGetWindowUserPointer(window))->OnViewportSizeChange(width, height);
     });
+
+    _running = true;
 }
 
 void Renderer::Run() {
-    while (!glfwWindowShouldClose(_window)) {
+    while (_running) {
+        if (glfwWindowShouldClose(_window)) {
+            _running = false;
+        }
+
         glfwPollEvents();
+        Input::Update(_window);
+
+        if (Input::GetKeyDown(KeyCode::Escape)) {
+            _running = false;
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
