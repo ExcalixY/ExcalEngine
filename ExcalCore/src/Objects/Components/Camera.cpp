@@ -4,6 +4,7 @@
 
 #include "ExcalCore/Objects/Components/Camera.h"
 #include "ExcalCore/Objects/Components/Transform.h"
+#include "ExcalCore/Systems/Debug/Log.h"
 
 const glm::mat4& Camera::GetProjectionMatrix() const {
     RecalculateProjectionMatrix();
@@ -20,7 +21,13 @@ void Camera::RecalculateProjectionMatrix() const {
 }
 
 void Camera::RecalculateViewMatrix() const {
-    _view_matrix = glm::lookAt(_transform->GetPosition(), _transform->GetPosition() + _transform->Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec3 pos     = _transform->GetPosition();
+    glm::vec3 forward = _transform->Forward();
+
+    Debug::Log("Cam pos: {},{},{}", pos.x, pos.y, pos.z);
+    Debug::Log("Cam forward: {},{},{}", forward.x, forward.y, forward.z);
+
+    _view_matrix = glm::lookAt(pos, pos + forward, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void Camera::SetFOV(const float fov) {
@@ -35,5 +42,10 @@ void Camera::SetNearClip(const float near_clip) {
 
 void Camera::SetFarClip(const float far_clip) {
     _far_clip = far_clip;
+    _is_dirty = true;
+}
+
+void Camera::SetAspectRatio(const float aspect_ratio) {
+    _aspect_ratio = aspect_ratio;
     _is_dirty = true;
 }

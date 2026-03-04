@@ -19,11 +19,13 @@ public:
     template <std::derived_from<Component> T>
     T* GetComponent();
 
-    template <std::derived_from<Component> T>
-    T* AddComponent();
+    template <std::derived_from<Component> T, typename... Args>
+    T* AddComponent(Args... args);
 
     template <std::derived_from<Component> T>
     bool RemoveComponent();
+
+    Transform* GetTransform() { return &_transform; }
 
 private:
     std::string _name;
@@ -34,7 +36,8 @@ private:
 
 template <std::derived_from<Component> T>
 T* GameObject::GetComponent() {
-    if (typeid(T) == typeid(Transform)) {
+    if constexpr(std::is_same_v<T, Transform>) {
+        Debug::LogWarning("GameObject already contains component Transform in it's own class. Use GetTransform() instead.");
         return &_transform;
     }
 
@@ -48,25 +51,31 @@ T* GameObject::GetComponent() {
     return nullptr;
 }
 
-template<std::derived_from<Component> T>
-T* GameObject::AddComponent() {
-    for (auto& ptr : _components) {
-        if (auto i = dynamic_cast<T*>(ptr.get())) {
+template<std::derived_from<Component> T, typename... Args>
+T* GameObject::AddComponent(Args... args) {
+    if constexpr(std::is_same_v<T, Transform>) {
+        Debug::LogWarning("GameObject already contains component Transform in it's own class. Use GetTransform() instead.");
+        return &_transform;
+    }
+
+
+    for (std::unique_ptr<Component>& ptr : _components) {
+        if (T* i = dynamic_cast<T*>(ptr.get())) {
             Debug::LogWarning("GameObject {} already contains Component {}.", _name, typeid(T).name());
-            return nullptr;
+            return i;
         }
     }
 
-    auto ptr = std::make_unique<T>(this, &_transform);
+    auto ptr = std::make_unique<T>(this, &_transform, std::forward<Args>(args)...);
     T* ptr_ret = ptr.get();
 
     if (ptr != nullptr) {
         _components.push_back(std::move(ptr));
-        return nullptr;
+        return ptr_ret;
     }
 
     Debug::LogError("Failed to Add Component to GameObject {}. Component: {}.", _name, typeid(T).name());
-    return ptr_ret;
+    return nullptr;
 }
 
 template<std::derived_from<Component> T>

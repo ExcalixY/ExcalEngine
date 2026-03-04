@@ -12,6 +12,10 @@ set(CORE_SRC
         src/Objects/Components/Camera.cpp
         src/Core/UUID/UUID_Manager.cpp
         src/Objects/Components/Transform.cpp
+        src/Renderer/Meshes/Mesh.cpp
+        include/ExcalCore/Rendering/GPU_Data.h
+        src/Renderer/Material.cpp
+        src/Renderer/Shader.cpp
 )
 
 add_library(ExcalCore SHARED ${CORE_SRC} ../Libs/glad/src/glad.c)

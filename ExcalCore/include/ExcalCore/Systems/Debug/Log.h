@@ -11,7 +11,7 @@
 namespace Debug {
     namespace _internal {
         inline void _log_impl(std::string_view prefix, std::string_view fmt, std::format_args args) {
-            std::cerr << prefix << std::vformat(fmt, args);
+            std::cerr << prefix << std::vformat(fmt, args) << std::endl;
         }
     }
 
@@ -31,7 +31,7 @@ namespace Debug {
     }
 
     template<typename... Args>
-    void LogDebug(std::format_string<Args...> fmt, Args&&... args) {
+    void Log(std::format_string<Args...> fmt, Args&&... args) {
         _internal::_log_impl("[DEBUG]   | ", fmt.get(), std::make_format_args(args...));
     }
 }

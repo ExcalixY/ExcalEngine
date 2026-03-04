@@ -25,12 +25,14 @@ public:
     void SetFOV(float fov);
     void SetNearClip(float near_clip);
     void SetFarClip(float far_clip);
+    void SetAspectRatio(float aspect_ratio);
 
 private:
     ProjectionType _proj_type = ProjectionType::PERSPECTIVE;
     float _fov = 0.0f;
     float _near_clip = 0.0f;
     float _far_clip = 0.0f;
+    float _aspect_ratio = 1.0f;
 
     mutable glm::mat4 _proj_matrix{};
     mutable glm::mat4 _view_matrix{};
