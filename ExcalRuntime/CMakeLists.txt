@@ -12,5 +12,5 @@ set(RUNTIME_SRC
 
 add_library(ExcalRuntime SHARED ${RUNTIME_SRC})
 
-target_link_libraries(ExcalRuntime PRIVATE ExcalCore)
+target_link_libraries(ExcalRuntime PUBLIC ExcalCore)
 target_include_directories(ExcalRuntime PUBLIC include)

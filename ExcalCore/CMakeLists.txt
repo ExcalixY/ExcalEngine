@@ -13,7 +13,6 @@ set(CORE_SRC
         src/Core/UUID/UUID_Manager.cpp
         src/Objects/Components/Transform.cpp
         src/Renderer/Meshes/Mesh.cpp
-        include/ExcalCore/Rendering/GPU_Data.h
         src/Renderer/Material.cpp
         src/Renderer/Shader.cpp
 )

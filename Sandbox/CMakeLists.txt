@@ -1,4 +1,4 @@
-project(CodeCard
+project(ExcalSandbox
     VERSION 0.1
     DESCRIPTION "A Sample Game for my Game Engine - ExcalEngine"
 )
@@ -10,6 +10,6 @@ set(GAME_SRC
     src/main.cpp
 )
 
-add_executable(CodeCard ${GAME_SRC})
+add_executable(ExcalSandbox ${GAME_SRC})
 
-target_link_libraries(CodeCard PRIVATE ExcalCore ExcalRuntime)
+target_link_libraries(ExcalSandbox PRIVATE ExcalRuntime)
